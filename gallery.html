@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Bao Farms</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Additional Gallery Page Styles */
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .gallery-filter {
+            background: none;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 20px;
+            margin: 5px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-filter.active,
+        .gallery-filter:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            height: 250px;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .gallery-overlay h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .gallery-overlay p {
+            color: #ddd;
+            text-align: center;
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+        
+        .gallery-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        /* Lightbox Styles */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .lightbox-content {
+            position: relative;
+            max-width: 80%;
+            max-height: 80%;
+        }
+        
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border: 5px solid white;
+        }
+        
+        .lightbox-caption {
+            position: absolute;
+            bottom: -40px;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .close-lightbox {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+        
+        .lightbox-prev,
+        .lightbox-next {
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+        
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/baofarms.png" alt="Bao Farms Logo">
+                <h1>Farms</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="gallery.html" class="active">Gallery</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Banner -->
+    <section class="page-banner">
+        <div class="container">
+            <h1>Our Gallery</h1>
+            <p>Visual journey through our sustainable farming operations</p>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Farm Gallery</h2>
+                <p>Explore our farm operations through images</p>
+            </div>
+            
+            <div class="gallery-filters" data-aos="fade-up">
+                <button class="gallery-filter active" data-filter="all">All</button>
+                <button class="gallery-filter" data-filter="poultry">Poultry</button>
+                <button class="gallery-filter" data-filter="fishery">Fishery</button>
+                <button class="gallery-filter" data-filter="crops">Crops</button>
+                <button class="gallery-filter" data-filter="facilities">Facilities</button>
+            </div>
+            
+            <div class="gallery-grid" id="gallery-container">
+                <!-- Poultry Images -->
+                <div class="gallery-item" data-category="poultry" data-aos="fade-up">
+                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Free-range Chickens">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Free-range Chickens</h3>
+                        <p>Our chickens enjoying outdoor access in a natural environment</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="poultry" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1569975414227-2b4c783ec18f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Poultry Processing">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Poultry Processing</h3>
+                        <p>Quality control during our poultry processing operations</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="poultry" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Fresh Eggs">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Farm Fresh Eggs</h3>
+                        <p>Organic eggs from our free-range chickens</p>
+                    </div>
+                </div>
+                
+                <!-- Fishery Images -->
+                <div class="gallery-item" data-category="fishery" data-aos="fade-up">
+                    <img src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Fish Farming">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Fish Farming</h3>
+                        <p>Our modern aquaculture systems for sustainable fish production</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="fishery" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1603048588665-791ca8aea617?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Tilapia Harvest">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Tilapia Harvest</h3>
+                        <p>Harvesting fresh tilapia from our aquaculture ponds</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="fishery" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1544551763-92ab472cad5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Catfish Farming">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Catfish Farming</h3>
+                        <p>Our catfish farming operations with advanced water management systems</p>
+                    </div>
+                </div>
+                
+                <!-- Crop Images -->
+                <div class="gallery-item" data-category="crops" data-aos="fade-up">
+                    <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Vegetable Garden">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Vegetable Garden</h3>
+                        <p>Our organic vegetable garden with diverse crop varieties</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="crops" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80" alt="Leafy Greens">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Leafy Greens</h3>
+                        <p>Fresh, pesticide-free leafy greens ready for harvest</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="crops" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Tomato Plants">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Tomato Plants</h3>
+                        <p>Our tomato plants thriving in the organic growing environment</p>
+                    </div>
+                </div>
+                
+                <!-- Facilities Images -->
+                <div class="gallery-item" data-category="facilities" data-aos="fade-up">
+                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80" alt="Farm Landscape">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Farm Landscape</h3>
+                        <p>Aerial view of our farm showing the diverse agricultural operations</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="facilities" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Farm Equipment">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Farm Equipment</h3>
+                        <p>Modern farming equipment used in our agricultural operations</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-category="facilities" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Farm Buildings">
+                    <div class="gallery-overlay">
+                        <div class="gallery-icon">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <h3>Farm Buildings</h3>
+                        <p>Our sustainable farm structures designed for optimal operations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Farm Tour Videos</h2>
+                <p>Take a virtual tour of our farming operations</p>
+            </div>
+            
+            <div class="video-grid">
+                <div class="video-item" data-aos="fade-up">
+                    <div class="video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Bao Farms Tour</h3>
+                        <p>A comprehensive tour of our sustainable farming operations</p>
+                    </div>
+                </div>
+                
+                <div class="video-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <h3>Sustainable Farming Practices</h3>
+                        <p>Learn about the eco-friendly methods we use at Bao Farms</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content" data-aos="zoom-in">
+                <h2>Want to visit our farm in person?</h2>
+                <p>Contact us to schedule a farm tour and see our operations firsthand</p>
+                <a href="contact.html" class="btn btn-light">Schedule a Visit</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <h3><span>Bao</span> Farms</h3>
+                    <p>Committed to sustainable agriculture and providing high-quality farm products since 2015.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-services">
+                    <h3>Our Services</h3>
+                    <ul>
+                        <li><a href="services.html#poultry">Poultry Farming</a></li>
+                        <li><a href="services.html#fishery">Fishery</a></li>
+                        <li><a href="services.html#crops">Crop Production</a></li>
+                        <li><a href="services.html#consulting">Farm Consulting</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Farm Road, Agricultural Zone, Nigeria</li>
+                        <li><i class="fas fa-phone"></i> +234 123 456 7890</li>
+                        <li><i class="fas fa-envelope"></i> info@baofarms.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Bao Farms. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="gallery-lightbox">
+        <div class="lightbox-content">
+            <span class="close-lightbox">&times;</span>
+            <img src="" alt="Gallery Image" id="lightbox-image">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+            <div class="lightbox-nav">
+                <span class="lightbox-prev"><i class="fas fa-chevron-left"></i></span>
+                <span class="lightbox-next"><i class="fas fa-chevron-right"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gallery Filtering
+            const galleryFilters = document.querySelectorAll('.gallery-filter');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            galleryFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    // Remove active class from all filters
+                    galleryFilters.forEach(f => f.classList.remove('active'));
+                    
+                    // Add active class to clicked filter
+                    this.classList.add('active');
+                    
+                    // Get filter category
+                    const filterCategory = this.getAttribute('data-filter');
+                    
+                    // Filter gallery items
+                    galleryItems.forEach(item => {
+                        if (filterCategory === 'all' || item.getAttribute('data-category') === filterCategory) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Lightbox functionality
+            const lightbox = document.getElementById('gallery-lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            const closeLightbox = document.querySelector('.close-lightbox');
+            const lightboxPrev = document.querySelector('.lightbox-prev');
+            const lightboxNext = document.querySelector('.lightbox-next');
+            
+            let currentIndex = 0;
+            const visibleItems = () => Array.from(galleryItems).filter(item => item.style.display !== 'none');
+            
+            // Open lightbox
+            galleryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const items = visibleItems();
+                    currentIndex = items.indexOf(this);
+                    
+                    const img = this.querySelector('img');
+                    const title = this.querySelector('h3').textContent;
+                    const description = this.querySelector('p').textContent;
+                    
+                    lightboxImage.src = img.src;
+                    lightboxCaption.innerHTML = `<h3>${title}</h3><p>${description}</p>`;
+                    
+                    lightbox.classList.add('active');
+                });
+            });
+            
+            // Close lightbox
+            closeLightbox.addEventListener('click', function() {
+                lightbox.classList.remove('active');
+            });
+            
+            // Close lightbox when clicking outside
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    lightbox.classList.remove('active');
+                }
+            });
+            
+            // Previous image
+            lightboxPrev.addEventListener('click', function() {
+                const items = visibleItems();
+                currentIndex = (currentIndex - 1 + items.length) % items.length;
+                
+                const item = items[currentIndex];
+                const img = item.querySelector('img');
+                const title = item.querySelector('h3').textContent;
+                const description = item.querySelector('p').textContent;
+                
+                lightboxImage.src = img.src;
+                lightboxCaption.innerHTML = `<h3>${title}</h3><p>${description}</p>`;
+            });
+            
+            // Next image
+            lightboxNext.addEventListener('click', function() {
+                const items = visibleItems();
+                currentIndex = (currentIndex + 1) % items.length;
+                
+                const item = items[currentIndex];
+                const img = item.querySelector('img');
+                const title = item.querySelector('h3').textContent;
+                const description = item.querySelector('p').textContent;
+                
+                lightboxImage.src = img.src;
+                lightboxCaption.innerHTML = `<h3>${title}</h3><p>${description}</p>`;
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (!lightbox.classList.contains('active')) return;
+                
+                if (e.key === 'Escape') {
+                    lightbox.classList.remove('active');
+                } else if (e.key === 'ArrowLeft') {
+                    lightboxPrev.click();
+                } else if (e.key === 'ArrowRight') {
+                    lightboxNext.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
